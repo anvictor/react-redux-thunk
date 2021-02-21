@@ -1,9 +1,9 @@
 function weatherConditioner(data) {
-    console.log("data", data);
+    console.log("data", data.list);
     const nowLocal = new Date();
     const localTimeZone = nowLocal.getTimezoneOffset()*60
-    const timeZoneShift = (data.data.city.timezone + localTimeZone)/60/60
-    const justForecast = data.data.list
+    const timeZoneShift = (data.city.timezone + localTimeZone)/60/60
+    const justForecast = data.list
     const firstDate = new Date(justForecast[0].dt_txt)
     const firstDataHours = firstDate.getHours()
     
@@ -21,10 +21,8 @@ function weatherConditioner(data) {
             day: justForecast[closestNightIndexReal+i*8+4].main.temp
         })
     }
-        return {
-            status: "ok",
-            data: conditionedData
-        }
+    console.log('conditionedData', conditionedData)
+        return conditionedData
       }
      
 

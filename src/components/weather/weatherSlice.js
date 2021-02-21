@@ -8,16 +8,11 @@ export const fetchWeatherByCity = createAsyncThunk(
   'fetchWeatherByCity',
   async (cityName) => {
     console.log("fetchWeatherByCity", cityName);
-    await apiFetchWeatherData(cityName)
-    .then(res=>{
-      console.log('res',res);
-      let weatherData = weatherConditioner(res)
-      console.log('weatherConditioner weatherData',weatherData);
-      return res
-  })
-    .catch(error=>{
-      console.log("error", "City name not found or exceeded the limit of calls.")
-    })
+    const {data} = await apiFetchWeatherData(cityName)
+
+
+  const weather = weatherConditioner(data)
+  return weather
   }
 )
 
@@ -25,7 +20,7 @@ export const weatherSlice = createSlice({
   name: 'weather',
   initialState: {
 
-    value: {data: [
+    value: [
       {
         day: 1,
         name: "Mock Sun",
@@ -52,8 +47,6 @@ export const weatherSlice = createSlice({
         night: -5
       }
     ]
-    }
-    
   },
   reducers: {
    
@@ -66,7 +59,7 @@ export const weatherSlice = createSlice({
     [fetchWeatherByCity.fulfilled]: (state, action) => {
       console.log("action", action);
       // Add user to the state array
-      state={...state, value:action.payload}
+      state.value=action.payload
       console.log("state",state);
     }
   }

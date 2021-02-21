@@ -23,7 +23,7 @@ function App() {
     setErrormessage("init")
   }
 
-  console.log("weather",weather.data[0].name.split('Mock').length);
+  console.log("weather",weather);
   return (
     <div className="App">
       {city !=="init" && <span className="city">{city}</span>}
@@ -34,9 +34,9 @@ function App() {
      />
      { 
      // if not Mock then visible Chart
-     !weather.data[0].name.includes('Mock')
+     !weather[0].name.includes('Mock')
       && <Weather 
-      weather={weather.data}
+      weather={weather}
      />}
     </div>
   );
