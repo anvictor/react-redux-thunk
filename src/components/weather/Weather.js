@@ -5,7 +5,7 @@ import {
 
 
 export function Weather (forecast){
-  
+  console.log('forecast', forecast)
     return (
       <BarChart
         width={1000}

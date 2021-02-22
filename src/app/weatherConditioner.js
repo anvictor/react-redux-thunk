@@ -1,5 +1,4 @@
 function weatherConditioner(data) {
-    console.log("data", data.list);
     const nowLocal = new Date();
     const localTimeZone = nowLocal.getTimezoneOffset()*60
     const timeZoneShift = (data.city.timezone + localTimeZone)/60/60
@@ -11,17 +10,25 @@ function weatherConditioner(data) {
     let closestNightIndexPredict = 8 - firstDataHours / 3 + Math.trunc(timeZoneShift/3);
     let closestNightIndexReal = closestNightIndexPredict === 8?0:closestNightIndexPredict;
     let conditionedData=[];
-
-    for(let i=0; i<5;i++){
+    
+    let isCurrentLessThenApiDataLength = true;
+    let i=0;
+    while(isCurrentLessThenApiDataLength){
         let nightWeekDay = new Date(justForecast[closestNightIndexReal+i*8].dt_txt)
         let nightDate = (new Date(justForecast[closestNightIndexReal+i*8].dt_txt)).getDate()
+
         conditionedData.push({
             name: `${nightDate} ${nightWeekDay.toLocaleDateString("EN", { weekday: 'long' })}`,
             night: justForecast[closestNightIndexReal+i*8].main.temp,
             day: justForecast[closestNightIndexReal+i*8+4].main.temp
         })
+
+        i++;
+        isCurrentLessThenApiDataLength = (
+            closestNightIndexReal+i*8 < 40
+            && closestNightIndexReal+i*8+4 < 40
+        )
     }
-    console.log('conditionedData', conditionedData)
         return conditionedData
       }
      

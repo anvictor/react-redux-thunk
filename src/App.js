@@ -39,12 +39,13 @@ function App() {
       && <Weather 
       weather={weather}
      />}
-     { 
+
+     {/* { 
      // if not Mock then visible Chart
      !weather[0].name.includes('Mock')
       && <WeatherD3Chart 
       weather={weather}
-     />}
+     />} */}
 
     </div>
   );
