@@ -4,6 +4,7 @@ import { Weather } from './components/weather/Weather';
 import {useSelector, useDispatch} from 'react-redux';
 import {selectCity} from './components/city/citySlice';
 import {selectWeather, fetchWeatherByCity} from './components/weather/weatherSlice';
+import WeatherD3Chart from './components/weather/weatherD3Chart'
 import './App.css';
 
 function App() {
@@ -38,6 +39,13 @@ function App() {
       && <Weather 
       weather={weather}
      />}
+     { 
+     // if not Mock then visible Chart
+     !weather[0].name.includes('Mock')
+      && <WeatherD3Chart 
+      weather={weather}
+     />}
+
     </div>
   );
 }
