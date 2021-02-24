@@ -7,7 +7,6 @@ import {weatherConditioner} from '../../app/weatherConditioner'
 export const fetchWeatherByCity = createAsyncThunk(
   'fetchWeatherByCity',
   async (cityName) => {
-    console.log("fetchWeatherByCity", cityName);
     const {data} = await apiFetchWeatherData(cityName)
 
 
@@ -22,29 +21,29 @@ export const weatherSlice = createSlice({
 
     value: [
       {
-        day: 1,
+        night: -4,
+        day: -6,
         name: "Mock Sun",
-        night: -1,
       },
       {
-        day: 2,
+        night: -7,
+        day: -8,
         name: "Mock Mon",
-        night: -2
       },
       {
-        day: 3,
+        night: -7,
+        day: 10,
         name: "Mock Tue",
-        night: -3
       },
       {
-        day: 4,
+        night: 11,
+        day: 12,
         name: "Mock Wed",
-        night: -4
       },
       {
-        day: 5,
+        night: 13,
+        day: 14,
         name: "Mock Thu",
-        night: -5
       }
     ]
   },
@@ -57,10 +56,8 @@ export const weatherSlice = createSlice({
   extraReducers: {
     // Add reducers for additional action types here, and handle loading state as needed
     [fetchWeatherByCity.fulfilled]: (state, action) => {
-      console.log("action", action);
       // Add user to the state array
       state.value=action.payload
-      console.log("state",state);
     }
   }
 });

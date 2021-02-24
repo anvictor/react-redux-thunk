@@ -1,0 +1,11 @@
+.barDay {
+    fill: #82ca9d;
+}
+
+.barNight {
+    fill: #8884d8;
+}
+
+.highlight {
+    fill: orange;
+}

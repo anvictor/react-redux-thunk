@@ -9,7 +9,6 @@ export const citySlice = createSlice({
    
     addCityName: (state, action) => {
       state.value = action.payload;
-      console.log("addCityName state",state,'addCityName action',action);
     },
   },
 });

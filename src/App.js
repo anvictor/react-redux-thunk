@@ -4,7 +4,7 @@ import { Weather } from './components/weather/Weather';
 import {useSelector, useDispatch} from 'react-redux';
 import {selectCity} from './components/city/citySlice';
 import {selectWeather, fetchWeatherByCity} from './components/weather/weatherSlice';
-import WeatherD3Chart from './components/weather/weatherD3Chart'
+import WeatherD3Chart from './components/weather/WeatherD3Chart'
 import './App.css';
 
 function App() {
@@ -24,7 +24,6 @@ function App() {
     setErrormessage("init")
   }
 
-  console.log("weather",weather);
   return (
     <div className="App">
       {city !=="init" && <span className="city">{city}</span>}
@@ -40,12 +39,13 @@ function App() {
       weather={weather}
      />}
 
-     {/* { 
+     { 
      // if not Mock then visible Chart
-     !weather[0].name.includes('Mock')
-      && <WeatherD3Chart 
+     !weather[0].name.includes('Mock')   && 
+      <WeatherD3Chart 
+      city = {city}
       weather={weather}
-     />} */}
+     />}
 
     </div>
   );
