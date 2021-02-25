@@ -1,24 +1,38 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect} from 'react'
 import * as d3 from "d3";
 import './WeatherD3Chart.css'
 
 const WeatherD3Chart = (props) => {
     const data = props.weather
-    const dataNight = data.map((d)=>d.night)
-    const minNight = Math.min(...dataNight)
-    const maxNight = Math.max(...dataNight)
-    const dataDay = data.map((d)=>d.day)
-    const minDay = Math.min(...dataDay)
-    const maxDay = Math.max(...dataDay)
-    const allMax = Math.max(...[maxNight,maxDay])
-    const allMin = Math.min(...[minNight,minDay])
-    const domainTempr = [allMin, allMax]
-    const dayNames = data.map( (d) => d.name)
+    console.log('props.weather', props.weather)
     const city = props.city
     
+    
     useEffect(() => {
-        
-        var svg = d3.select("#WeatherD3Chart"),
+        const dataNight = data.map((d)=>d.night)
+        const minNight = Math.min(...dataNight)
+        const maxNight = Math.max(...dataNight)
+        const dataDay = data.map((d)=>d.day)
+        const minDay = Math.min(...dataDay)
+        const maxDay = Math.max(...dataDay)
+        const allMax = Math.max(...[maxNight,maxDay])
+        const allMin = Math.min(...[minNight,minDay])
+        const domainSign = Math.sign(allMax) !== Math.sign(allMin) 
+        ? 0 : Math.sign(allMax)
+        const dayNames = data.map( (d) => d.name)
+
+        const domainTempr = [domainSign === 1?-1:allMin, domainSign === -1?1:allMax]
+
+        const shiftNightLeft = 0.6
+        const shiftDayRight = 1.2
+        const interval = 1.67
+
+    console.log('domainSign', domainSign)
+
+        /**
+         * if another svg present then use id
+         */
+        const svg = d3.select("#WeatherD3Chart"),
         margin = 200,
         width = svg.attr("width") - margin,
         height = svg.attr("height") - margin;
@@ -39,7 +53,6 @@ const WeatherD3Chart = (props) => {
         var y_axis = d3.scaleLinear()
         .domain(domainTempr)
         .range([height,0]);
-
 
         var g = svg.append("g")
         .attr("transform", "translate(" + 100 + "," + 100 + ")")
@@ -66,23 +79,35 @@ const WeatherD3Chart = (props) => {
         .attr("text-anchor", "end")
         .attr("stroke", "red")
         .text("Temp C°")
-            
-            
-            
+         
+        /**
+        ******************* barNight
+        * */   
         g.selectAll(".barNight")
         .data(dataNight)
         .enter().append("rect")
-        
         .on("mouseover", onMouseOver) //Add listener for the mouseover event
         .on("mouseout", onMouseOut)   //Add listener for the mouseout event
-        .attr("x", (d, i) =>  x_axis.bandwidth()*0.6 + i*x_axis.bandwidth()*1.67 )
-        .attr("y", (d)=> d < 0 ? y_axis(0) : y_axis(d) )
+        .attr("x", (d, i) =>  {
+            return x_axis.bandwidth()
+            * shiftNightLeft 
+            + i * x_axis.bandwidth()
+            * interval 
+        })
+        .attr("y", (d)=>{
+            return d < 0 
+            ? y_axis(0) : y_axis(d)
+        } )
         .attr("width", x_axis.bandwidth()/2)
         .transition()
         .ease(d3.easeLinear)
         .duration(400)
         .delay((d, i) => i * 50)
-        .attr("height", (d) => d < 0 ? y_axis(d) - y_axis(0):y_axis(0) - y_axis(d))
+        .attr("height", (d) =>{
+             return d < 0 
+             ? y_axis(d) - y_axis(0)
+             : y_axis(0) - y_axis(d)
+        })
         .attr("class", "barNight")
         .attr("data-phase", "barNight")
         .attr("data-name", (d) => `${d} night` )
@@ -90,19 +115,32 @@ const WeatherD3Chart = (props) => {
         .attr("data-height",(d)=> d<0 ? y_axis(0) : y_axis(d) )
         .attr("data-is_negative",(d)=> d<0 )
 
+
+        /**
+        ******************* barDay
+        * */   
         g.selectAll(".barDay")
         .data(dataDay)
         .enter().append("rect")
         .on("mouseover", onMouseOver) //Add listener for the mouseover event
         .on("mouseout", onMouseOut)   //Add listener for the mouseout event
-        .attr("x", (d, i) =>  x_axis.bandwidth()*1.2 + i*x_axis.bandwidth()*1.67 )
+        .attr("x", (d, i) =>  {
+            return x_axis.bandwidth()
+            * shiftDayRight 
+            + i * x_axis.bandwidth()
+            * interval 
+        })
         .attr("y", (d)=> d < 0 ? y_axis(0) : y_axis(d) )
         .attr("width", x_axis.bandwidth()/2)
         .transition()
         .ease(d3.easeLinear)
         .duration(400)
         .delay((d, i) => i * 50)
-        .attr("height", (d) => d < 0 ? y_axis(d) - y_axis(0):y_axis(0) - y_axis(d))
+        .attr("height", (d) =>{
+             return d < 0 
+             ? y_axis(d) - y_axis(0)
+             : y_axis(0) - y_axis(d)
+        })
         .attr("class", "barDay")
         .attr("data-phase", "barDay")
         .attr("data-name", (d) => `${d} day` )
@@ -149,7 +187,6 @@ const WeatherD3Chart = (props) => {
         }
 
         return () => {
-            console.log('clear0',props)
             d3.select("#WeatherD3Chart  .chartTitle").remove()
             d3.select("#WeatherD3Chart  .Temp").remove()
             d3.select("#WeatherD3Chart  .Days").remove()
@@ -161,7 +198,7 @@ const WeatherD3Chart = (props) => {
 
       
 
-    }, [city, dataDay, dataNight, dayNames, domainTempr, props])
+    }, [city, data])
 
    
     

@@ -21,8 +21,8 @@ export const weatherSlice = createSlice({
 
     value: [
       {
-        night: -4,
-        day: -6,
+        night: 4,
+        day: 6,
         name: "Mock Sun",
       },
       {
@@ -31,18 +31,18 @@ export const weatherSlice = createSlice({
         name: "Mock Mon",
       },
       {
-        night: -7,
-        day: 10,
+        night: -9,
+        day: -10,
         name: "Mock Tue",
       },
       {
-        night: 11,
-        day: 12,
+        night: -11,
+        day: -12,
         name: "Mock Wed",
       },
       {
-        night: 13,
-        day: 14,
+        night: -13,
+        day: -14,
         name: "Mock Thu",
       }
     ]
